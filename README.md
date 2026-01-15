@@ -1,5 +1,3 @@
-# todo-app
-
 # Todo App – MERN Stack
 
 Ứng dụng **Todo App** giúp quản lý công việc hằng ngày với đầy đủ chức năng tạo, xem, sửa, xóa (CRUD), lọc và thống kê task. Ứng dụng được xây dựng bằng MERN Stack kết hợp Tailwind CSS và shadcn/ui để có giao diện hiện đại, dễ mở rộng.
