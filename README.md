@@ -7,30 +7,17 @@
 - **Frontend**: React, Vite, TypeScript (tuỳ bạn), Tailwind CSS, shadcn/ui
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB (Mongoose)
-- **Khác**: Axios/Fetch để gọi API, dotenv, Render/Vercel/... để deploy (tùy bạn)
+- **Khác**: Axios/Fetch để gọi API, dotenv, Render/Vercel/... để deploy
 
 ## ✨ Tính năng chính
 
 - Thêm, chỉnh sửa, xoá task.
 - Đánh dấu hoàn thành / chưa hoàn thành.
-- Lọc task theo trạng thái, theo ngày/thời gian (nếu bạn có).
+- Lọc task theo trạng thái, theo ngày/thời gian
 - Thống kê nhanh số lượng task (completed / pending).
 - Phân trang danh sách task (nếu có).
 - UI responsive, tối ưu cho cả desktop và mobile.
 
-## 📦 Cài đặt & chạy dự án
+```
 
-```bash
-# 1. Clone project
-git clone https://github.com/kiee19/todo-app.git
-cd todo-app
-
-# 2. Cài đặt dependencies cho backend
-cd backend
-npm install
-
-# 3. Tạo file .env cho backend
-# ví dụ:
-# MONGODB_URI=your_mongodb_connection_string
-#
 ```
