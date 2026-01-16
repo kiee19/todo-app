@@ -12,22 +12,38 @@ import { toast } from "sonner";
 
 const HomePage = () => {
   const [taskBuffer, setTaskBuffer] = useState([]);
+  const [activeTaskCount, setActiveTaskCount] = useState();
+  const [completeTaskCount, setCompleteTaskCount] = useState();
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     fetchTasks();
   }, []);
 
+  // logic
   const fetchTasks = async () => {
     try {
       const res = await axios.get("http://localhost:5001/api/tasks");
-      setTaskBuffer(res.data);
-
-      console.log(res.data);
+      setTaskBuffer(res.data.tasks);
+      setActiveTaskCount(res.data.activeCount);
+      setCompleteTaskCount(res.data.completeCount);
     } catch (error) {
       console.error("Lỗi xảy ra khi truy xuất tasks", error);
       toast.error("Lỗi xảy ra khi truy xuất tasks");
     }
   };
+
+  // variants
+  const filteredTasks = taskBuffer.filter((task) => {
+    switch (filter) {
+      case "active":
+        return task.status === "active";
+      case "completed":
+        return task.status === "complete";
+      default:
+        return true;
+    }
+  });
 
   return (
     <div className="min-h-screen w-full bg-[#fefcff] relative">
@@ -50,10 +66,15 @@ const HomePage = () => {
           <AddTask />
 
           {/* Thống kê và bộ lộc */}
-          <StatsAndFilters />
+          <StatsAndFilters
+            activeTasksCount={activeTaskCount}
+            completedTaskCount={completeTaskCount}
+            filter={filter}
+            setFilter={setFilter}
+          />
 
           {/* Danh sách nhiệm vụ */}
-          <TaskList filterTasks={taskBuffer} />
+          <TaskList filter={filter} filterTasks={filteredTasks} />
 
           {/* Phân trang và lọc theo Date */}
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
@@ -62,7 +83,10 @@ const HomePage = () => {
           </div>
 
           {/* Chân trang */}
-          <Footer />
+          <Footer
+            activeTasksCount={activeTaskCount}
+            completedTasksCount={completeTaskCount}
+          />
         </div>
       </div>
     </div>
