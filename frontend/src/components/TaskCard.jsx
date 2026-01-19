@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "./ui/card";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
@@ -10,9 +10,68 @@ import {
   Trash2,
 } from "lucide-react";
 import { Input } from "./ui/input";
+import api from "@/lib/axios";
+import { toast } from "sonner";
 
-const TaskCard = ({ task, index }) => {
-  let isEditting = false;
+const TaskCard = ({ task, index, handleTaskChanged }) => {
+  const [isEditting, setIsEditting] = useState(false);
+  const [updateTaskTitle, setUpdateTaskTitle] = useState(task.title || "");
+
+  const deleteTask = async (taskId) => {
+    try {
+      await api.delete(`/tasks/${taskId}`);
+      toast.success("Nhiệm vụ đã xóa");
+      handleTaskChanged();
+    } catch (error) {
+      console.error("Lỗi xảy ra khi xóa task", error);
+      toast.error("Lỗi xảy ra khi xóa nhiệm vụ mới");
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      updateTask();
+    }
+  };
+
+  const updateTask = async () => {
+    try {
+      setIsEditting(false);
+      await api.put(`/tasks/${task._id}`, {
+        title: updateTaskTitle,
+      });
+      toast.success(`Nhiệm vụ đã đổi thành ${updateTaskTitle}`);
+      handleTaskChanged();
+    } catch (error) {
+      console.error("Lỗi xảy ra khi update task", error);
+      toast.error("Lỗi xảy ra khi cập nhật nhiệm vụ mới");
+    }
+  };
+
+  const toggleTaskCompleteButton = async () => {
+    try {
+      if (task.status === "active") {
+        await api.put(`/tasks/${task._id}`, {
+          status: "complete",
+          completedAt: new Date().toISOString(),
+        });
+
+        toast.success(`${task.title} đã hoàn thành`);
+        handleTaskChanged();
+      } else {
+        await api.put(`/tasks/${task._id}`, {
+          status: "active",
+          completedAt: null,
+        });
+
+        toast.success(`${task.title} đã đổi sang chưa hoàn thành`);
+        handleTaskChanged();
+      }
+    } catch (error) {
+      console.error("Lỗi xảy ra khi update task", error);
+      toast.error("Lỗi xảy ra khi cập nhật nhiệm vụ");
+    }
+  };
 
   return (
     <Card
@@ -33,6 +92,7 @@ const TaskCard = ({ task, index }) => {
               ? "text-success hover:text-success/80"
               : "text-muted-foreground hover:text-primary"
           )}
+          onClick={toggleTaskCompleteButton}
         >
           {task.status === "complete" ? (
             <CheckCircle2 className="size-5" />
@@ -47,6 +107,13 @@ const TaskCard = ({ task, index }) => {
             <Input
               placeholder="cần phải làm gì?"
               className="flex-1 h-12 text-base border-border/50 focus:border-primary/50 focus:ring-primary:20"
+              value={updateTaskTitle}
+              onChange={(e) => setUpdateTaskTitle(e.target.value)}
+              onKeyPress={handleKeyPress}
+              onBlur={() => {
+                setIsEditting(false);
+                setUpdateTaskTitle(task.title || "");
+              }}
             />
           ) : (
             <p
@@ -87,6 +154,10 @@ const TaskCard = ({ task, index }) => {
             variant="ghost"
             size="icon"
             className="shrink-0 transition-colors size-8 text-muted-foreground hover:text-info"
+            onClick={() => {
+              setIsEditting(true);
+              setUpdateTaskTitle(task.title || "");
+            }}
           >
             <SquarePen className="size-4" />
           </Button>
@@ -95,6 +166,7 @@ const TaskCard = ({ task, index }) => {
             variant="ghost"
             size="icon"
             className="shrink-0 transition-colors size-8 text-muted-foreground hover:text-info"
+            onClick={() => deleteTask(task._id)}
           >
             <Trash2 className="size-4" />
           </Button>
