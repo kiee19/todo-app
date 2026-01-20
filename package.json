@@ -1,0 +1,22 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "Ứng dụng **Todo App** giúp quản lý công việc hằng ngày với đầy đủ chức năng tạo, xem, sửa, xóa (CRUD), lọc và thống kê task. Ứng dụng được xây dựng bằng MERN Stack kết hợp Tailwind CSS và shadcn/ui để có giao diện hiện đại, dễ mở rộng.",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiee19/todo-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kiee19/todo-app/issues"
+  },
+  "homepage": "https://github.com/kiee19/todo-app#readme"
+}
